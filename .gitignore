@@ -7,3 +7,5 @@
 *.log
 .env
 tmp
+*.sublime-project
+work-at-olist/work-at-olist.sublime-workspace
