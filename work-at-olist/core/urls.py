@@ -10,6 +10,6 @@ urlpatterns = [
         views.ChannelDetail.as_view(),
         name='channels_categories'),
     url(r'channels/(?P<channel_name>(\w|-)+)/(?P<category_name>(\w|-)+)/$',
-        views.ChannelCategory.as_view(),
+        views.CategoryDetail.as_view(),
         name='channels_category')
 ]

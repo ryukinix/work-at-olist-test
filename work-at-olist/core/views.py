@@ -30,7 +30,7 @@ class ChannelDetail(APIView):
         return Response(serializer.data)
 
 
-class ChannelCategory(APIView):
+class CategoryDetail(APIView):
     """
     Retrieve the parents and subcategories from each named category
     """
@@ -49,10 +49,10 @@ class ChannelCategory(APIView):
     def _concat(categories):
         """
         Concatenate multiple categories of a given QuerySet
-        into a dummy Class defined with colletions.namedtuple
+        into a dummy Class defined with collections.namedtuple
 
         The parents and subcategories of all instances of a same category
-        is concatenated and created a new instance as namedtuple UniqueCategory.
+        is concatenated and created a new instance as UniqueCategory.
         """
         from collections import namedtuple
         UniqueCategory = namedtuple('UniqueCategory', ['name',
@@ -62,5 +62,5 @@ class ChannelCategory(APIView):
         subcategories = sum((list(x.subcategories) for x in categories), [])
 
         return UniqueCategory(name=categories[0].name,
-                              parents=parents,
-                              subcategories=subcategories)
+                              parents=list(set(parents)), # remove duplicates
+                              subcategories=list(set(subcategories)))
