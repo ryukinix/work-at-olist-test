@@ -4,11 +4,11 @@ from django.db import models
 
 class Channel(models.Model):
     """
-    Each channel has a unique identifier as primary key
+    Each channel has a unique identifier
     and a field name.
     """
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    identifier = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
 
     def __str__(self):
@@ -17,10 +17,10 @@ class Channel(models.Model):
 
 class Category(models.Model):
     """
-    Each category has a unique identifier as primary key,
+    Each category has a unique identifier,
     the category name and a possible parent. A category belongs to a channel.
     """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    identifier = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     name = models.CharField(max_length=128)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
     parent = models.ForeignKey('Category', null=True, related_name='children')
@@ -35,3 +35,14 @@ class Category(models.Model):
             return self.parent.parents + [self.parent]
 
         return []
+
+    @property
+    def parent_name(self):
+        """Return the name of parent Category"""
+        return self.parent.name
+
+
+    @property
+    def subcategories(self):
+        """Return all the subcategories of the category"""
+        return self.children.all()
