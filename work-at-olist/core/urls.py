@@ -6,10 +6,10 @@ urlpatterns = [
     url(r'channels/$',
         views.ChannelList.as_view(),
         name='channels'),
-    url(r'channels/(?P<channel_name>[a-z]+)/$',
+    url(r'channels/(?P<channel_name>(\w|-)+)/$',
         views.ChannelDetail.as_view(),
         name='channels_categories'),
-    url(r'channels/(?P<channel_name>[a-z]+)/(?P<category_name>[a-z]+)/$',
+    url(r'channels/(?P<channel_name>(\w|-)+)/(?P<category_name>(\w|-)+)/$',
         views.ChannelCategory.as_view(),
         name='channels_category')
 ]
