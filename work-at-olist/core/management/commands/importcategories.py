@@ -61,7 +61,7 @@ class Command(BaseCommand):
         csv_path = options['csv_categories']
         for category_path in read_csv(csv_path):
             parent = None
-            categories = [x.strip() for x in category_path.split('/')]
+            categories = [x.strip().lower() for x in category_path.split('/')]
             parent = get_last_parent(categories, channel)
             name = categories[-1]
             (cat, created) = Category.objects.get_or_create(name=name,
