@@ -37,12 +37,6 @@ class Category(models.Model):
         return []
 
     @property
-    def parent_name(self):
-        """Return the name of parent Category"""
-        return self.parent.name
-
-
-    @property
     def subcategories(self):
         """Return all the subcategories of the category"""
         return self.children.all()

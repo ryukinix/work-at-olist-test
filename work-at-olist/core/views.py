@@ -25,8 +25,8 @@ class ChannelDetail(APIView):
     """
     def get(self, request, channel_name, format=None):
         channel = get_object_or_404(Channel, name=channel_name)
-        categories = channel.category_set.all()
-        serializer = serializers.CategoryNamesSerializer(categories, many=True)
+        categories = Category.objects.filter(channel=channel, parent=None)
+        serializer = serializers.CategoryRootSerializer(categories, many=True)
         return Response(serializer.data)
 
 
@@ -62,5 +62,5 @@ class CategoryDetail(APIView):
         subcategories = sum((list(x.subcategories) for x in categories), [])
 
         return UniqueCategory(name=categories[0].name,
-                              parents=list(set(parents)), # remove duplicates
+                              parents=list(set(parents)),  # remove duplicates
                               subcategories=list(set(subcategories)))
