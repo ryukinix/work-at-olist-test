@@ -1,6 +1,7 @@
 import csv
 
 from django.core.management import BaseCommand
+from django.db import transaction
 
 from core.models import Category, Channel
 
@@ -55,6 +56,8 @@ class Command(BaseCommand):
         parser.add_argument('channel_name')
         parser.add_argument('csv_categories')
 
+    # speed-up insert from hell (incredible improvement)
+    @transaction.atomic
     def handle(self, *args, **options):
         channel_name = options['channel_name'].lower()
         channel = overwrite_channel(channel_name)
