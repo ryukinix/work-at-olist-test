@@ -2,37 +2,31 @@ import uuid
 from django.db import models
 
 
-class SetModel(models.Model):
+class Channel(models.Model):
     """
-    Base class as a mathematical set.
-    Has a identifier UUID as its primary key and a field name unique.
+    Each channel has a unique identifier as primary key
+    and a field name.
     """
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
-    name = models.CharField(max_length=128, unique=True)
 
-    class Meta:
-        abstract = True  # define a abstract base class
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=128)
 
     def __str__(self):
         return self.name
 
 
-class Channel(SetModel):
+class Category(models.Model):
     """
-    Set of Channels. As defined on the SetModel: has a unique identifier
-    and the field name as unique.
+    Each category has a unique identifier as primary key,
+    the category name and a possible parent. A category belongs to a channel.
     """
-    pass
-
-
-class Category(SetModel):
-    """
-    Set of Categories. Must have a unique identifier, the category name,
-    the channel name whose the category belongs and a possible parent.
-    """
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    name = models.CharField(max_length=128)
     channel = models.ForeignKey(Channel, on_delete=models.CASCADE)
-    parent = models.ForeignKey('Category', null=True, blank=True,
-                               related_name='children')
+    parent = models.ForeignKey('Category', null=True, related_name='children')
+
+    def __str__(self):
+        return self.name
 
     @property
     def parents(self):
