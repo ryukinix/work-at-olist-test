@@ -56,12 +56,13 @@ class Command(BaseCommand):
         parser.add_argument('csv_categories')
 
     def handle(self, *args, **options):
-        channel_name = options['channel_name']
+        channel_name = options['channel_name'].lower()
         channel = overwrite_channel(channel_name)
         csv_path = options['csv_categories']
         for category_path in read_csv(csv_path):
             parent = None
-            categories = [x.strip().lower() for x in category_path.split('/')]
+            categories = [x.strip().lower().replace(' ', '-')
+                          for x in category_path.split('/')]
             parent = get_last_parent(categories, channel)
             name = categories[-1]
             (cat, created) = Category.objects.get_or_create(name=name,
@@ -69,3 +70,4 @@ class Command(BaseCommand):
                                                             channel=channel)
             if created:
                 cat.save()
+                print('Category created: {} - {}'.format(parent, name))
