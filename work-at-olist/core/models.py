@@ -39,4 +39,4 @@ class Category(models.Model):
     @property
     def subcategories(self):
         """Return all the subcategories of the category"""
-        return self.children.all()
+        return list(self.children.all())

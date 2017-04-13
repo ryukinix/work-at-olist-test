@@ -58,8 +58,8 @@ class CategoryDetail(APIView):
         UniqueCategory = namedtuple('UniqueCategory', ['name',
                                                        'parents',
                                                        'subcategories'])
-        parents = sum((list(x.parents) for x in categories), [])
-        subcategories = sum((list(x.subcategories) for x in categories), [])
+        parents = sum((x.parents for x in categories), [])
+        subcategories = sum((x.subcategories for x in categories), [])
 
         return UniqueCategory(name=categories[0].name,
                               parents=list(set(parents)),  # remove duplicates
