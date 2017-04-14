@@ -72,6 +72,9 @@ class CategoryModelTests(TestCase):
         self.assertListEqual(self.cat.subcategories, [self.cat_children])
         self.assertListEqual(self.cat_children.subcategories, [])
 
+    def test_if_str_method_is_implemented(self):
+        self.assertEqual(self.cat.name, str(self.cat))
+
 
 class ChannelModelTests(TestCase):
 
@@ -102,6 +105,9 @@ class ChannelModelTests(TestCase):
         self.chan.delete()
         categories = models.Category.objects.filter(channel=self.chan)
         self.assertEquals(len(categories), 0)
+
+    def test_if_str_method_is_implemented(self):
+        self.assertEqual(self.chan.name, str(self.chan))
 
 
 class ChannelListViewTests(TestCase):
