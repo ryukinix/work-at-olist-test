@@ -1,15 +1,16 @@
 import os
 
 from django.test import TestCase
+from django.urls import reverse
+from rest_framework.test import APITestCase
+from rest_framework import status
 
 import workatolist
 from core.management.commands import importcategories
 from core import models
 
-# This avoid problems on parsing of API response
-# and unintentional print on tests runtime
-workatolist.settings.DEBUG = False
-
+# information about the categories.csv file on root of the project.
+# this will be used to test the importcategories and the views
 CSV_FPATH = os.path.join(workatolist.settings.BASE_DIR, 'categories.csv')
 CSV_MD5HASH = '1a6743d0bc87bfa8df47504754cce6ff'
 
@@ -110,19 +111,86 @@ class ChannelModelTests(TestCase):
         self.assertEqual(self.chan.name, str(self.chan))
 
 
-class ChannelListViewTests(TestCase):
+class ChannelListViewTests(APITestCase):
 
-    def test_output_of_api(self):
-        pass
+    def test_channel_list_empty(self):
+        url = reverse('core:channel-list')
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+
+    def test_create_channel_and_list(self):
+        url = reverse('core:channel-list')
+        chan = models.Channel.objects.create(name='channel-list')
+        chan.save()
+        response = self.client.get(url, format='json')
+        channels = list(map(dict, response.data))
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIn({'name': chan.name,
+                       'identifier': str(chan.identifier)}, channels)
 
 
-class ChannelDetailViewTests(TestCase):
+class ChannelDetailViewTests(APITestCase):
 
-    def test_output_of_api(self):
-        pass
+    def setUp(self):
+        importcategories.import_categories('channel-detail', CSV_FPATH)
+
+    def test_http_404_for_inexistent_channel_lookup(self):
+        url = reverse('core:channel-detail',
+                      kwargs={'channel_name': 'channel_detail'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_consistency_of_output(self):
+        """Test the number o roots categories and total of categories"""
+        url = reverse('core:channel-detail',
+                      kwargs={'channel_name': 'channel-detail'})
+        response = self.client.get(url, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        # book, games and computers
+        self.assertEqual(len(response.data), 3)
+        # all the 23 entries as the number of entries on CSV
+        self.assertEqual(self.count_tree(response.data),
+                         23)
+
+    def count_tree(self, ordered_dicts):
+        """
+        Given a tree of categories by subcategories as list of ordered_dicts
+        Return the number of nodes on tree (total of categories entries)
+        """
+        count = 0
+        for entry in ordered_dicts:
+            if entry['subcategories']:
+                elements = 1 + self.count_tree(entry['subcategories'])
+            else:
+                elements = 1
+            count += elements
+
+        return count
 
 
-class CategoryDetailViewTests(TestCase):
+class CategoryDetailViewTests(APITestCase):
 
-    def test_output_of_api(self):
-        pass
+    def setUp(self):
+        importcategories.import_categories('category-detail', CSV_FPATH)
+
+    def test_http_404_for_inexistent_category_lookup(self):
+        url = reverse('core:category-detail',
+                      kwargs={'channel_name': 'category-detail',
+                              'category_name': 'inexistent-category'})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_consistency_of_output(self):
+        url = reverse('core:category-detail',
+                      kwargs={'channel_name': 'category-detail',
+                              'category_name': 'computers'})
+        response = self.client.get(url, format='json')
+        parents = ['books']
+        subcategories = ['applications', 'database', 'programming',
+                         'notebooks', 'tablets', 'desktop']
+        self.assertEquals(response.status_code, status.HTTP_200_OK)
+        self.assertListEqual(parents,
+                             [x['name'] for x in response.data['parents']])
+        self.assertListEqual(subcategories,
+                             [x['name'] for x in response.data['subcategories']])
+
