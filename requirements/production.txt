@@ -3,3 +3,4 @@ psycopg2
 prettyconf
 dj-database-url
 djangorestframework
+whitenoise
