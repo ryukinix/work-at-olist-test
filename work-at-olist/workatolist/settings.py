@@ -7,16 +7,17 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
+# SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = bool(os.environ.get('DJANGO_DEBUG', ''))
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: keep the secret key used in production secret!
 DEBUG_SECRET_KEY = 'ld7s4bcrf)mso_*y^mnnfrr=fh&)4gs$*e%-acjxw5nyulpioz'
 SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', DEBUG_SECRET_KEY)
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1"
+    'localhost',
+    '127.0.0.1',
+    '.herokuapp.com'
 ]
 
 # disable browsable API of rest rest_framework on production
