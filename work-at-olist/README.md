@@ -1,30 +1,27 @@
-[![CircleCI](https://circleci.com/gh/ryukinix/work-at-olist-test.svg?style=svg)](https://circleci.com/gh/ryukinix/work-at-olist-test)
+[![CircleCI](https://circleci.com/gh/ryukinix/work-at-olist-test.svg?style=svg&circle-token=49f900d14cc61539b963ecf8a03122b7501ef696)](https://circleci.com/gh/ryukinix/work-at-olist-test)
 [![codecov](https://codecov.io/gh/ryukinix/work-at-olist-test/branch/master/graph/badge.svg?token=C6wyVSwO1b)](https://codecov.io/gh/ryukinix/work-at-olist-test)
 
 # Description
 
 Implementation of work-at-olist test about processing channels & categories for marketplaces. 
 
-## Libs
+## Libraries
 
-* `Django` 1.11
-* `Django Rest Framework` 3.6.2
+| Library               | Version       |
+| :-------------------- | ------------- |
+| Django                | 1.11          |
+| Django Rest Framework | 3.6.2         |
 
 ## Environment
 
----
-Computer: Notebook Dell D620
-Operating System: Linux 4.7.10 @ Manjaro
-Editors: Sublime Text, Emacs and Vim (in order of most used)
-Python: 3.6.0
----
-
-## CI
-
----
-CI: CircleCI
-Coverage: Codecov
----
+| Environment       | Description             |
+| :---------------- | :------------------     |
+| Computer          | Notebook Dell D620      |
+| Operating System  | Linux 4.7.10 @ Manjaro  |
+| Editors           | Sublime Text & Emacs    |
+| Python Version    | 3.6.0                   |
+| CI                | CircleCI                |
+| Coverage          | Codecov
 
 # API REST Docs
 
