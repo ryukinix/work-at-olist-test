@@ -6,16 +6,19 @@ from django.db import transaction
 from core.models import Category, Channel
 from workatolist import settings
 
+
 # help functions are prefixed with _
-
-
 def _read_csv(fpath):
-    """Return a generator of lines from a csv file"""
+    """
+    Return a generator of categories from
+    the colum category of a csv file
+    """
     with open(fpath) as csv_file:
         csv_content = csv.reader(csv_file, delimiter=',')
-        next(csv_content)  # drop header
+        columns = next(csv_content)
+        category_index = list(map(str.lower, columns)).index('category')
         for line in csv_content:
-            yield line[0]  # use generator to be memory-friendly
+            yield line[category_index]  # use generator to be memory-friendly
 
 
 def _get_last_parent(categories, channel):
