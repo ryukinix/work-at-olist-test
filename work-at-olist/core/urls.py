@@ -5,11 +5,11 @@ from . import views
 urlpatterns = [
     url(r'channels/$',
         views.ChannelList.as_view(),
-        name='channels'),
+        name='channel-list'),
     url(r'channels/(?P<channel_name>(\w|-)+)/$',
         views.ChannelDetail.as_view(),
-        name='channels_categories'),
+        name='channel-detail'),
     url(r'channels/(?P<channel_name>(\w|-)+)/(?P<category_name>(\w|-)+)/$',
         views.CategoryDetail.as_view(),
-        name='channels_category')
+        name='category-detail')
 ]
