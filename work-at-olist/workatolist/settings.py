@@ -8,12 +8,25 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/1.9/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'ld7s4bcrf)mso_*y^mnnfrr=fh&)4gs$*e%-acjxw5nyulpioz'
+DEBUG = bool(os.environ.get('DJANGO_DEBUG', ''))
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG_SECRET_KEY = 'ld7s4bcrf)mso_*y^mnnfrr=fh&)4gs$*e%-acjxw5nyulpioz'
+SECRET_KEY = os.environ.get('DJANGO_SECRET_KEY', DEBUG_SECRET_KEY)
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1"
+]
+
+# disable browsable API of rest rest_framework on production
+# This is really desired?
+# if not DEBUG:
+#     REST_FRAMEWORK = {
+#         'DEFAULT_RENDERER_CLASSES': (
+#             'rest_framework.renderers.JSONRenderer',
+#         )
+#     }
 
 
 # Application definition
@@ -110,5 +123,5 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.9/howto/static-files/
-
+STATIC_ROOT = 'staticfiles'
 STATIC_URL = '/static/'
