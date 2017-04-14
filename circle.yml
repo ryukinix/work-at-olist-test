@@ -1,0 +1,9 @@
+dependencies:
+  pre:
+    - pip install codecov
+
+test:
+  override:
+    - coverage run --source=work-at-olist/core work-at-olist/manage.py test core
+  post:
+    - codecov --token=6303fb0a-6d32-4bbc-9478-e5c390e4cb98
