@@ -8,6 +8,7 @@ from workatolist import settings
 
 # help functions are prefixed with _
 
+
 def _read_csv(fpath):
     """Return a generator of lines from a csv file"""
     with open(fpath) as csv_file:
@@ -15,6 +16,7 @@ def _read_csv(fpath):
         next(csv_content)  # drop header
         for line in csv_content:
             yield line[0]  # use generator to be memory-friendly
+
 
 def _get_last_parent(categories, channel):
     """
@@ -30,6 +32,7 @@ def _get_last_parent(categories, channel):
                                       parent=parent,
                                       channel=channel)
     return parent
+
 
 def overwrite_channel(channel_name):
     """
